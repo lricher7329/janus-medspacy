@@ -195,8 +195,7 @@ class TestMedSpaCyForRelease:
             nlp = medspacy.load(language_model, **{"disable": ["parser"]})
         # Except if you don't have the model downloaded
         except OSError:
-            assert True
-            return
+            pytest.skip(f"spaCy model '{language_model}' not installed")
         doc = nlp(
             "This is a very short piece of text that we want to use for testing. No patients were given type 2 diabetes "
             "as part of this test case. Podczas tego testu nie dano żadnemu pacjentowi cukrzycy typu drugiego."

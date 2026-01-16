@@ -9,26 +9,30 @@ from medspacy.context import ConText
 from medspacy.context import ConTextRule
 
 import pytest
-import os
 from pathlib import Path
 
-nlp = spacy.load("en_core_web_sm")
+
+@pytest.fixture(scope="module")
+def nlp():
+    """Load spaCy model once per test module for efficiency."""
+    return spacy.load("en_core_web_sm")
+
 
 class TestConText:
-    def test_initiate(self):
+    def test_initiate(self, nlp):
         assert ConText(nlp)
 
-    def test_default_patterns(self):
+    def test_default_patterns(self, nlp):
         """Test that default rules are loaded"""
         context = ConText(nlp)
         assert context.rules
 
-    def test_empty_patterns(self):
+    def test_empty_patterns(self, nlp):
         """Test that no rules are loaded"""
         context = ConText(nlp, rules=None)
         assert not context.rules
 
-    def test_custom_patterns_json(self):
+    def test_custom_patterns_json(self, nlp):
         """Test that rules are loaded from a json"""
         filepath = os.path.join(
             Path(__file__).resolve().parents[2], "resources", "en", "context_rules.json"
@@ -36,13 +40,13 @@ class TestConText:
         context = ConText(nlp, rules=filepath)
         assert context.rules
 
-    def test_call(self):
+    def test_call(self, nlp):
         doc = nlp("Pulmonary embolism has been ruled out.")
         context = ConText(nlp)
         doc = context(doc)
         assert isinstance(doc, spacy.tokens.doc.Doc)
 
-    def test_registers_attributes(self):
+    def test_registers_attributes(self, nlp):
         """Test that the default ConText attributes are set on ."""
         doc = nlp("There is consolidation.")
         doc.ents = (Span(doc, 2, 3, "CONDITION"),)
@@ -51,7 +55,7 @@ class TestConText:
         assert hasattr(doc._, "context_graph")
         assert hasattr(doc.ents[0]._, "modifiers")
 
-    def test_registers_context_attributes(self):
+    def test_registers_context_attributes(self, nlp):
         """Test that the additional attributes such as 'is_negated' are registered on spaCy spans."""
         doc = nlp("This is a span.")
         context = ConText(nlp, span_attrs="default", rules=None)
@@ -66,7 +70,7 @@ class TestConText:
         ]:
             assert hasattr(span._, attr_name)
 
-    def test_default_attribute_values(self):
+    def test_default_attribute_values(self, nlp):
         """Check that default Span attributes have False values without any modifiers."""
         doc = nlp("There is evidence of pneumonia.")
         context = ConText(nlp, rules=None)
@@ -82,7 +86,7 @@ class TestConText:
         ]:
             assert getattr(doc.ents[0]._, attr_name) is False
 
-    def test_is_negated(self):
+    def test_is_negated(self, nlp):
         doc = nlp("There is no evidence of pneumonia.")
         context = ConText(nlp, span_attrs="default", rules=None)
         rules = [
@@ -94,7 +98,7 @@ class TestConText:
 
         assert doc.ents[0]._.is_negated is True
 
-    def test_is_historical(self):
+    def test_is_historical(self, nlp):
         doc = nlp("History of pneumonia.")
         context = ConText(nlp, span_attrs="default", rules=None)
         rules = [ConTextRule("history of", "HISTORICAL", direction="forward")]
@@ -104,7 +108,7 @@ class TestConText:
 
         assert doc.ents[0]._.is_historical is True
 
-    def test_is_family(self):
+    def test_is_family(self, nlp):
         doc = nlp("Family history of breast cancer.")
         context = ConText(nlp, span_attrs="default", rules=None)
         rules = [ConTextRule("family history of", "FAMILY", direction="forward")]
@@ -114,7 +118,7 @@ class TestConText:
 
         assert doc.ents[0]._.is_family is True
 
-    def test_custom_attribute_error(self):
+    def test_custom_attribute_error(self, nlp):
         """Test that a custom spacy attribute which has not been set
         will throw a ValueError.
         """
@@ -124,24 +128,24 @@ class TestConText:
         with pytest.raises(ValueError):
             ConText(nlp, span_attrs=custom_attrs)
 
-    def test_custom_attributes_mapping(self):
+    def test_custom_attributes_mapping(self, nlp):
         custom_attrs = {
             "NEGATED_EXISTENCE": {"is_negated": True},
         }
         try:
             Span.set_extension("is_negated", default=False)
-        except:
+        except ValueError:
             pass
         context = ConText(nlp, span_attrs=custom_attrs)
         assert context.context_attributes_mapping == custom_attrs
 
-    def test_custom_attributes_value1(self):
+    def test_custom_attributes_value1(self, nlp):
         custom_attrs = {
             "NEGATED_EXISTENCE": {"is_negated": True},
         }
         try:
             Span.set_extension("is_negated", default=False)
-        except:
+        except ValueError:
             pass
         context = ConText(nlp, span_attrs=custom_attrs)
         context.add([ConTextRule("no evidence of", "NEGATED_EXISTENCE", "FORWARD")])
@@ -151,13 +155,13 @@ class TestConText:
 
         assert doc.ents[0]._.is_negated is True
 
-    def test_custom_attributes_value2(self):
+    def test_custom_attributes_value2(self, nlp):
         custom_attrs = {
             "FAMILY": {"is_family": True},
         }
         try:
             Span.set_extension("is_family", default=False)
-        except:
+        except ValueError:
             pass
         context = ConText(nlp, span_attrs=custom_attrs)
         context.add(
@@ -169,7 +173,7 @@ class TestConText:
 
         assert doc.ents[0]._.is_family is False
 
-    def test_simple_callback(self, capsys):
+    def test_simple_callback(self, nlp, capsys):
         context = ConText(nlp, rules=None)
 
         def simple_callback(matcher, doc, i, matches):
@@ -193,7 +197,7 @@ class TestConText:
         captured = capsys.readouterr()
         assert captured.out == "Matched on span: no evidence of\n"
 
-    def test_global_allowed_types1(self):
+    def test_global_allowed_types1(self, nlp):
         """Check that if the ConText has allowed_types defined
         and a ConTextRule does not, the ConTextRule will receive the component's
         value.
@@ -205,7 +209,7 @@ class TestConText:
         context.add([rule])
         assert rule.allowed_types == {"PROBLEM"}
 
-    def test_global_allowed_types2(self):
+    def test_global_allowed_types2(self, nlp):
         """Check that if the ConText does not have allowed_types defined
         and a ConTextRule does, the ConTextRule will not receive the component's
         value.
@@ -217,7 +221,7 @@ class TestConText:
         context.add([rule])
         assert rule.allowed_types == {"PROBLEM"}
 
-    def test_global_allowed_types3(self):
+    def test_global_allowed_types3(self, nlp):
         """Check that if both the ConText and a ConTextRule have allowed_types defined,
         the ConTextRule will not receive the component's value.
         """
@@ -228,7 +232,7 @@ class TestConText:
         context.add([rule])
         assert rule.allowed_types == {"PROBLEM"}
 
-    def test_context_modifier_termination(self):
+    def test_context_modifier_termination(self, nlp):
         context = ConText(
             nlp,
             rules=None,
@@ -242,7 +246,7 @@ class TestConText:
         context.add([rule])
         assert rule.terminated_by == {"POSITIVE_EXISTENCE", "UNCERTAIN"}
 
-    def test_rule_modifier_termination(self):
+    def test_rule_modifier_termination(self, nlp):
         context = ConText(nlp, rules=None, terminating_types=None)
         rule = ConTextRule(
             "no evidence of",
@@ -253,7 +257,7 @@ class TestConText:
         context.add([rule])
         assert rule.terminated_by == {"POSITIVE_EXISTENCE", "UNCERTAIN"}
 
-    def test_null_modifier_termination(self):
+    def test_null_modifier_termination(self, nlp):
         context = ConText(nlp, rules=None, terminating_types=None)
         rule = ConTextRule(
             "no evidence of", "NEGATED_EXISTENCE", "FORWARD", terminated_by=None
@@ -261,7 +265,7 @@ class TestConText:
         context.add([rule])
         assert rule.terminated_by == set()
 
-    def test_on_modifies_true(self):
+    def test_on_modifies_true(self, nlp):
         def on_modifies(target, modifier, span_between):
             return True
 
@@ -277,7 +281,7 @@ class TestConText:
         for ent in doc.ents:
             assert len(ent._.modifiers) == 1
 
-    def test_on_modifies_false(self):
+    def test_on_modifies_false(self, nlp):
         def on_modifies(target, modifier, span_between):
             return False
 
@@ -293,7 +297,7 @@ class TestConText:
         for ent in doc.ents:
             assert len(ent._.modifiers) == 0
 
-    def test_pseudo_modifier(self):
+    def test_pseudo_modifier(self, nlp):
         rules = [
             ConTextRule("negative", "NEGATED_EXISTENCE"),
             ConTextRule(
@@ -320,7 +324,7 @@ class TestConText:
         assert doc.ents[0]._.is_negated is True
         assert doc.ents[1]._.is_negated is False
 
-    def test_regex_pattern(self):
+    def test_regex_pattern(self, nlp):
         rules = [
             ConTextRule(
                 "no history of",
@@ -336,7 +340,7 @@ class TestConText:
         context(doc)
         assert len(doc._.context_graph.modifiers) == 2
 
-    def test_prune(self):
+    def test_prune(self, nlp):
         rules = [
             ConTextRule("history of", "HISTORICAL", direction="FORWARD"),
             ConTextRule("no history of", "NEGATED_EXISTENCE", direction="FORWARD"),
@@ -352,7 +356,7 @@ class TestConText:
         span = modifier.modifier_span
         assert doc[span[0] : span[1]].text.lower() == "no history of"
 
-    def test_prune_false(self):
+    def test_prune_false(self, nlp):
         rules = [
             ConTextRule("history of", "HISTORICAL", direction="FORWARD"),
             ConTextRule("no history of", "NEGATED_EXISTENCE", direction="FORWARD"),
@@ -365,7 +369,7 @@ class TestConText:
 
         assert len(doc._.context_graph.modifiers) == 2
 
-    def test_non_entity_input(self):
+    def test_non_entity_input(self, nlp):
         rules = [
             ConTextRule("history of", "HISTORICAL", direction="FORWARD"),
         ]
@@ -380,7 +384,7 @@ class TestConText:
             assert span._.is_historical
         Doc.remove_extension("my_custom_spans")
 
-    def test_allowed_types(self):
+    def test_allowed_types(self, nlp):
         doc = nlp("She is not prescribed any beta blockers for her hypertension.")
         # Manually define entities
         medication_ent = Span(doc, 5, 7, "MEDICATION")
@@ -418,6 +422,13 @@ class TestConText:
     #     Doc.remove_extension("my_custom_spans")
 
     def test_context_component_as_part_of_pipeline(self):
+        # Use a fresh nlp instance to avoid modifying the shared fixture
+        test_nlp = spacy.load("en_core_web_sm")
+
+        # Remove existing factory if it exists to allow re-registration
+        if "custom_span_setter" in Language.factories:
+            Language.factories.pop("custom_span_setter")
+
         @Language.factory("custom_span_setter")
         class CustomSpanSetterForTesting:
             def __init__(self, nlp, name="custom_span_setter"):
@@ -430,19 +441,19 @@ class TestConText:
                 doc._.my_custom_spans = [doc[-6:-4], doc[-2:]]
                 return doc
 
-        nlp.add_pipe("custom_span_setter")
-        nlp.add_pipe("medspacy_context", config={"rules": None})
-        nlp.get_pipe("medspacy_context").add(
+        test_nlp.add_pipe("custom_span_setter")
+        test_nlp.add_pipe("medspacy_context", config={"rules": None})
+        test_nlp.get_pipe("medspacy_context").add(
             [
                 ConTextRule("history of", "HISTORICAL", direction="FORWARD"),
             ]
         )
-        doc = nlp(
+        doc = test_nlp(
             "Patient has a history of diabetes and history of renal failiure",
             component_cfg={"medspacy_context": {"targets": "my_custom_spans"}},
         )
         for span in doc._.my_custom_spans:
             assert span._.is_historical
         Doc.remove_extension("my_custom_spans")
-        nlp.remove_pipe("custom_span_setter")
-        nlp.remove_pipe("medspacy_context")
+        test_nlp.remove_pipe("custom_span_setter")
+        test_nlp.remove_pipe("medspacy_context")

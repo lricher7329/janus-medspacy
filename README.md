@@ -30,8 +30,15 @@ for detecting semantic modifiers and attributes of entities, including negation 
 
 Future work could include I/O, relations extraction, and pre-trained clinical models.
 
-## Latest release 1.4.0
-What's new in 1.4.0:
+## Latest release 1.4.1
+What's new in 1.4.1:
+* - **Security fix**: Fixed SQL injection vulnerability in database I/O module.
+* - Added logging throughout key components for better observability.
+* - Fixed mutable default argument bug in extensions module.
+* - Improved test isolation and removed global warning suppression.
+
+## Previous release 1.4.0
+What was new in 1.4.0:
 * - **Python 3.13+ required** - Upgraded minimum Python version to 3.13 for latest language features and long-term support (EOL Oct 2028).
 * - Simplified spaCy dependency to `>=3.8,<4.0` (removed conditional version logic).
 * - Fixed Python 3.13 compatibility issue with deprecated `OrderedDict` import.

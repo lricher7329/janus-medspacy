@@ -78,6 +78,8 @@ def load(
         medspacy_enable, medspacy_disable
     )
 
+    logger.debug("Loading medspaCy pipeline with enabled components: %s", medspacy_enable)
+
     if model == "default":
         nlp = spacy.blank("en")
     elif isinstance(model, Language):
@@ -144,6 +146,7 @@ def load(
     if "medspacy_doc_consumer" in medspacy_enable:
         nlp.add_pipe("medspacy_doc_consumer")
 
+    logger.debug("medspaCy pipeline loaded successfully with %d components", len(nlp.pipe_names))
     return nlp
 
 

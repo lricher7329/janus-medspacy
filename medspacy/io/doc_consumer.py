@@ -4,8 +4,7 @@ from spacy.language import Language
 from spacy.tokens import Span
 
 from medspacy.context import ConTextModifier
-
-ALLOWED_DATA_TYPES = ("ents", "group", "section", "context", "doc")
+from medspacy._extensions import ALLOWED_DATA_TYPES
 
 DEFAULT_ENT_ATTRS = (
     "text",

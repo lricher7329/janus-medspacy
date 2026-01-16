@@ -1,8 +1,11 @@
+import logging
 from typing import Union, Iterable
 
 from spacy.tokens import Doc
 
 from ..preprocess import PreprocessingRule
+
+logger = logging.getLogger(__name__)
 
 
 class Preprocessor:
@@ -52,6 +55,8 @@ class Preprocessor:
         """
         for rule in self._rules:
             text = rule(text)
+
+        logger.debug("Preprocessor applied %d rules", len(self._rules))
 
         if not tokenize:
             return text

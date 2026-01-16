@@ -1,4 +1,5 @@
 """The ConText definiton."""
+import logging
 from os import path
 # Filepath to default rules which are included in package
 from pathlib import Path
@@ -12,7 +13,8 @@ from .context_modifier import ConTextModifier
 from .context_rule import ConTextRule
 from ..common.medspacy_matcher import MedspacyMatcher
 
-#
+logger = logging.getLogger(__name__)
+
 DEFAULT_ATTRIBUTES = {
     "NEGATED_EXISTENCE": {"is_negated": True},
     "POSSIBLE_EXISTENCE": {"is_uncertain": True},
@@ -329,5 +331,12 @@ class ConText:
             self.set_context_attributes(context_graph.edges)
 
         doc._.context_graph = context_graph
+
+        logger.debug(
+            "ConText processed doc: %d targets, %d modifiers, %d edges",
+            len(list(context_graph.targets)) if context_graph.targets else 0,
+            len(context_graph.modifiers),
+            len(context_graph.edges)
+        )
 
         return doc

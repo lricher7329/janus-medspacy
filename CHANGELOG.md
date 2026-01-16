@@ -1,3 +1,21 @@
+# Version 1.4.1
+
+## Security
+- **SEC-001**: Fixed SQL injection vulnerability in `db_connect.py` by adding identifier validation with regex pattern matching. Table names are now validated before SQL execution.
+
+## Bug Fixes
+- **PERF-001**: Fixed mutable default argument in `_extensions.py` - changed `sections` default from `list()` to `None` to prevent shared state between Doc instances.
+- **TST-003**: Fixed spaCy API incompatibility in tests - replaced deprecated `Language.factory(force=True)` with explicit factory registration check.
+
+## Improvements
+- **OBS-001**: Added logging throughout key components (`util.py`, `context.py`, `preprocessor.py`, `db_connect.py`, `medspacy_matcher.py`) for better observability.
+- **OBS-003**: Removed global `warnings.filterwarnings("ignore")` from `medspacy_matcher.py` to prevent suppressing important warnings.
+- **TST-003**: Improved test isolation by converting module-level spaCy model loading to pytest fixtures with module scope.
+- **TST-004**: Changed silent `OSError` handling in language model tests to use `pytest.skip()` for clear visibility when models are not installed.
+- **SCH-001**: Consolidated duplicate `ALLOWED_DATA_TYPES` constant - now defined once in `_extensions.py` and imported elsewhere.
+
+---
+
 # Version 1.4.0
 
 ## Breaking Changes

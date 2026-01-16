@@ -134,23 +134,35 @@ def any_context_attribute(span):
 
 def get_section_title_spans(doc):
     spans = []
-    for section in doc._.sections:
+    sections = doc._.sections
+    if sections is None:
+        return spans
+    for section in sections:
         start, end = section.title_span
         spans.append(doc[start:end])
     return spans
 
 
 def get_section_categories(doc):
-    return [section.category for section in doc._.sections]
+    sections = doc._.sections
+    if sections is None:
+        return []
+    return [section.category for section in sections]
 
 
 def get_section_parents(doc):
-    return [section.parent for section in doc._.sections]
+    sections = doc._.sections
+    if sections is None:
+        return []
+    return [section.parent for section in sections]
 
 
 def get_section_spans(doc):
     spans = []
-    for section in doc._.sections:
+    sections = doc._.sections
+    if sections is None:
+        return spans
+    for section in sections:
         start, end = section.section_span
         spans.append(doc[start:end])
     return spans
@@ -158,7 +170,10 @@ def get_section_spans(doc):
 
 def get_section_body_spans(doc):
     spans = []
-    for section in doc._.sections:
+    sections = doc._.sections
+    if sections is None:
+        return spans
+    for section in sections:
         start, end = section.body_span
         spans.append(doc[start:end])
     return spans
@@ -296,7 +311,7 @@ _span_extensions = {
 }
 
 _doc_extensions = {
-    "sections": {"default": list()},
+    "sections": {"default": None},  # Initialized to empty list by Sectionizer when called
     "section_titles": {"getter": get_section_title_spans},
     "section_categories": {"getter": get_section_categories},
     "section_spans": {"getter": get_section_spans},

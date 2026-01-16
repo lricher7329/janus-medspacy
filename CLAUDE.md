@@ -108,4 +108,23 @@ MedSpaCy registers custom attributes on spaCy objects:
 - `Span._.modifiers` - List of ConTextModifier objects affecting the span
 - `Span._.is_negated`, `is_uncertain`, `is_historical`, `is_hypothetical`, `is_family`
 - `Doc._.context_graph` - ConTextGraph with targets, modifiers, and edges
-- `Doc._.sections` - List of detected sections
+- `Doc._.sections` - List of detected sections (defaults to `None`, initialized by Sectionizer)
+
+### Logging
+
+MedSpaCy uses Python's standard `logging` module. Key components log at DEBUG level:
+- `medspacy.util` - Pipeline loading
+- `medspacy.context.context` - ConText processing stats
+- `medspacy.preprocess.preprocessor` - Preprocessing rule application
+- `medspacy.io.db_connect` - Database connections
+
+To enable debug logging:
+```python
+import logging
+logging.getLogger("medspacy").setLevel(logging.DEBUG)
+```
+
+### Security Notes
+
+- **Database I/O**: SQL identifiers (table names) are validated using regex pattern matching before execution to prevent SQL injection attacks.
+- **Extensions**: The `ALLOWED_DATA_TYPES` constant is defined once in `medspacy/_extensions.py` and imported elsewhere to maintain consistency.

@@ -1,6 +1,35 @@
 import logging
+import re
 
 logger = logging.getLogger(__name__)
+
+# Pattern for validating SQL identifiers (table names, column names)
+# Allows alphanumeric characters, underscores, and common prefixes like dbo.
+_VALID_IDENTIFIER_PATTERN = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]*(\.[a-zA-Z_][a-zA-Z0-9_]*)?$')
+
+
+def _validate_identifier(identifier: str, identifier_type: str = "identifier") -> str:
+    """Validate that a SQL identifier (table name, etc.) is safe.
+
+    Args:
+        identifier: The identifier to validate.
+        identifier_type: Description of the identifier type for error messages.
+
+    Returns:
+        The validated identifier.
+
+    Raises:
+        ValueError: If the identifier contains invalid characters.
+    """
+    if not identifier:
+        raise ValueError(f"SQL {identifier_type} cannot be empty")
+    if not _VALID_IDENTIFIER_PATTERN.match(identifier):
+        raise ValueError(
+            f"Invalid SQL {identifier_type}: '{identifier}'. "
+            f"Identifiers must start with a letter or underscore and contain only "
+            f"alphanumeric characters, underscores, and optionally a schema prefix (e.g., 'dbo.tablename')."
+        )
+    return identifier
 
 
 class DbConnect:
@@ -65,11 +94,13 @@ class DbConnect:
         logger.info("Opened connection to %s.%s", server, db)
 
     def create_table(self, query, table_name, drop_existing):
+        # Validate table_name to prevent SQL injection
+        _validate_identifier(table_name, "table name")
+
         if drop_existing:
             try:
-                self.cursor.execute("drop table if exists {0}".format(table_name))
-            # except pyodbc.DatabaseError:
-            except self.database_exception as e:
+                self.cursor.execute(f"drop table if exists {table_name}")
+            except self.database_exception:
                 pass
             else:
                 self.conn.commit()

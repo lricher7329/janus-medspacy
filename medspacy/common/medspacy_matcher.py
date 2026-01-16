@@ -1,3 +1,4 @@
+import logging
 import warnings
 from typing import Iterable, List, Dict, Tuple, Set
 
@@ -9,9 +10,7 @@ from .base_rule import BaseRule
 from .regex_matcher import RegexMatcher
 from .util import prune_overlapping_matches
 
-# suppress warnings here because the matchers warn if no patterns are specified, but since multiple matchers are
-# included that is not necessarily bad.
-warnings.filterwarnings("ignore")
+logger = logging.getLogger(__name__)
 
 
 class MedspacyMatcher:
