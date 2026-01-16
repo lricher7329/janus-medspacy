@@ -133,9 +133,13 @@ This project uses forked versions of upstream dependencies to maintain compatibi
 | `janus-pyrush` | [janus-pyrush](https://github.com/lawrencericher/janus-pyrush) | [PyRuSH](https://github.com/medspacy/PyRuSH) |
 | `janus-pysbd` | [janus-pysbd](https://github.com/lawrencericher/janus-pysbd) | [pysbd](https://github.com/nipunsadvilkar/pysbd) |
 
-**Current approach**: Dependencies are installed via git URLs in `requirements/requirements.txt`. This allows installation without publishing to PyPI.
+**Current approach**: Dependencies are installed via SSH git URLs in `requirements/requirements.txt`. Users must have:
+1. SSH keys configured with GitHub
+2. Access granted to the private repositories
 
-**Future consideration**: Publish `janus-pysbd` to PyPI for easier distribution and version pinning.
+**TODO**: Move `janus-pyrush` and `janus-pysbd` to public repositories to enable broader distribution.
+
+**Future consideration**: Publish forks to PyPI for easier distribution and version pinning.
 
 **Local development**: For active development on both packages simultaneously:
 ```bash
