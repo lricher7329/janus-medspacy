@@ -169,7 +169,7 @@ def visualize_dep(doc: Doc, jupyter: bool = True) -> str:
     targets_and_modifiers = []
     # Used to prevent duplication of token in targets or modifiers that appear twice due to being in a span group or, appearing twice as a modifier
     for target_or_modifier in (list(doc._.context_graph.targets) + doc._.context_graph.modifiers):
-        if isinstance (target_or_modifier, Span):
+        if isinstance(target_or_modifier, Span):
             span=target_or_modifier
         else:
             span=doc[target_or_modifier._start : target_or_modifier._end]
@@ -213,21 +213,6 @@ def visualize_dep(doc: Doc, jupyter: bool = True) -> str:
                     token_data.pop(idx + 1)
                 for other_data in token_data[idx + 1:]:
                     other_data["index"] -= len(span) - 1
-
-        # if len(span) == 1:
-        #     continue
-        #
-        # idx = data["index"]
-        # for other_token in span[1:]:
-        #     # Add the text to the display data for the first word
-        #     # and remove the subsequent token
-        #     data["text"] += " " + other_token.text
-        #     # Remove this token from the list of display data
-        #     token_data.pop(idx + 1)
-        #
-        # # Lower the index of the following tokens
-        # for other_data in token_data[idx + 1 :]:
-        #     other_data["index"] -= len(span) - 1
 
     dep_data = {"words": token_data, "arcs": []}
     

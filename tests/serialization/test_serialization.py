@@ -1,6 +1,3 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
 from typing import List
 import pytest
 import spacy
@@ -12,12 +9,10 @@ from medspacy.section_detection import Section, SectionRule, Sectionizer
 Span.set_extension("modifiers", default=(), force=True)
 Doc.set_extension("context_graph", default=None, force=True)
 
-
 @pytest.fixture(scope="module")
 def nlp():
     nlp = spacy.load("en_core_web_sm")
     return nlp
-
 
 class TestSerialization:
     @pytest.fixture(scope="class")

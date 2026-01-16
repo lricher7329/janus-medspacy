@@ -1,6 +1,3 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
 import pytest
 
 driver = ""
@@ -8,7 +5,6 @@ server = "test"
 db = "test"
 user = ""
 pwd = ""
-
 
 class TestDbConnect:
     @pytest.mark.skip(reason="not currently implemented with sqlite")

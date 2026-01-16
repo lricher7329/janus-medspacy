@@ -1,6 +1,3 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
 import spacy
 from spacy.pipeline import EntityRuler
 
@@ -43,7 +40,6 @@ context_doc = nlp(context_text)
 section_doc = nlp(section_text)
 section_parent_doc = nlp(section_parent_text)
 many_concept_docs = [nlp(t) for t in many_concept_texts]
-
 
 class TestDocConsumer:
     def test_init_default(self):

@@ -221,9 +221,7 @@ def get_data(doc, dtype=None, attrs=None, as_rows=False):
     if dtype in ALLOWED_DATA_TYPES:
         data = doc._.data.get(dtype, list())
         if attrs is not None:
-            from collections import OrderedDict
-
-            selected_data = OrderedDict()
+            selected_data = {}
             for key in attrs:
                 if key not in data:
                     raise ValueError("Invalid attr value:", key)

@@ -1,6 +1,3 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
 import spacy
 from spacy.language import Language
 from spacy.tokens import Span, Doc

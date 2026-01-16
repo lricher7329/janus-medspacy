@@ -1,6 +1,4 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
+import os
 from medspacy.preprocess import PreprocessingRule
 import pytest
 import re
@@ -8,7 +6,6 @@ import re
 import tempfile
 
 tmpdirname = tempfile.TemporaryDirectory()
-
 
 class TestMedSpaCyExtensions:
     def test_init_str(self):

@@ -1,6 +1,4 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
+import os
 import pytest
 import os
 import tempfile
@@ -35,7 +33,6 @@ db_dtypes = [
     "varchar(100)",
 ]
 
-
 def create_test_db(db, drop_existing=True):
     import os
 
@@ -62,7 +59,6 @@ def create_test_db(db, drop_existing=True):
     conn.commit()
     conn.close()
     print("Created file", db)
-
 
 class TestDbWriter:
     def test_init_from_sqlite3_conn(self):

@@ -1,6 +1,4 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
+import os
 import spacy
 import warnings
 import pytest
@@ -11,7 +9,6 @@ tmpdirname = tempfile.TemporaryDirectory()
 
 from medspacy.target_matcher import TargetRule
 from medspacy.common.base_rule import BaseRule
-
 
 class TestTargetRule:
     def test_initiate(self):
@@ -50,7 +47,6 @@ class TestTargetRule:
 
     def test_from_json(self, from_json_file):
         assert TargetRule.from_json(from_json_file)
-
 
 @pytest.fixture
 def from_json_file():

@@ -1,6 +1,9 @@
+import logging
 from typing import Iterable, Callable
 
 from ..postprocess import PostprocessingPattern
+
+logger = logging.getLogger(__name__)
 
 
 class PostprocessingRule:
@@ -61,7 +64,7 @@ class PostprocessingRule:
 
         # Every pattern passed - do the action
         if debug:
-            print("Passed:", self, "on ent:", ent, ent.sent)
+            logger.debug(f"Passed: {self} on ent: {ent} {ent.sent}")
 
         try:
             if self.kwargs:

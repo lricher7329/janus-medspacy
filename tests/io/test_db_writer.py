@@ -1,9 +1,7 @@
-import os, sys
+import os
 from datetime import time, datetime
 from pathlib import Path
 
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
 import pytest
 import os
 import tempfile
@@ -24,7 +22,6 @@ doc = nlp("There is no evidence of pneumonia.")
 
 doc_consumer = DocConsumer(nlp)
 doc_consumer(doc)
-
 
 class TestDbWriter:
     def test_init_from_sqlite3_conn_defaults(self):
@@ -60,12 +57,6 @@ class TestDbWriter:
         assert rslts[0] == 100
         db_conn.close()
         Path(db).unlink()
-
-
-
-
-
-
 
     def test_init_from_sqlite3_conn_specific_cols(self):
         from medspacy.io.db_connect import DbConnect

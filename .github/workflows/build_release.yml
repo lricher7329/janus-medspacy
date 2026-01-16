@@ -20,7 +20,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python 3.13
       uses: actions/setup-python@v5
       with:
         python-version: "3.13"
@@ -52,7 +52,8 @@ jobs:
 
     - name: Build package
       run: |
-        python setup.py sdist bdist_wheel
+        pip install build
+        python -m build
 
     - name: Test with pytest
       run: |
@@ -74,39 +75,16 @@ jobs:
         echo $TAG_VERSION
         echo ${{ steps.get_tag_version.outputs.tag_version }}
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name:  ${{ steps.get_tag_version.outputs.tag_version }}
-        release_name: "Release  ${{ steps.get_tag_version.outputs.tag_version }}"
-        draft: false
-        prerelease: false
-
     - name: Check built
       run: |
         ls dist
         pwd
-        ls        
+        ls
 
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create Release and Upload Assets
+      uses: softprops/action-gh-release@v2
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/medspacy-${{ steps.get_tag_version.outputs.tag_version }}.tar.gz
-        asset_name: medspacy-${{ steps.get_tag_version.outputs.tag_version }}.tar.gz
-        asset_content_type: application/gzip
-
-    - name: Upload Wheel Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/medspacy-${{ steps.get_tag_version.outputs.tag_version }}-py3-none-any.whl
-        asset_name: medspacy-${{ steps.get_tag_version.outputs.tag_version }}-py3-none-any.whl
-        asset_content_type: application/zip
+        name: "Release ${{ steps.get_tag_version.outputs.TAG_VERSION }}"
+        files: |
+          dist/medspacy-${{ steps.get_tag_version.outputs.TAG_VERSION }}.tar.gz
+          dist/medspacy-${{ steps.get_tag_version.outputs.TAG_VERSION }}-py3-none-any.whl

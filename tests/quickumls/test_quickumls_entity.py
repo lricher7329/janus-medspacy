@@ -1,6 +1,4 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
+import os
 import spacy
 import warnings
 from sys import platform
@@ -13,7 +11,6 @@ import medspacy
 from medspacy.util import get_quickumls_demo_dir
 
 MEDSPACY_DEFAULT_SPAN_GROUP_NAME = "medspacy_spans"
-
 
 class TestQuickUMLSEntity:
     def test_initialize_pipeline(self):

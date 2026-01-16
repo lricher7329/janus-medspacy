@@ -1,6 +1,4 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
+import os
 import tempfile
 
 import pytest
@@ -9,7 +7,6 @@ tmpdirname = tempfile.TemporaryDirectory()
 
 from medspacy.context import ConTextRule
 from medspacy.common.base_rule import BaseRule
-
 
 class TestItemData:
     def test_instantiate1(self):

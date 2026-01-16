@@ -1,6 +1,4 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
+import os
 import spacy
 import warnings
 from sys import platform
@@ -58,5 +56,4 @@ class TestQuickUMLSSpanGroupPT:
         span = doc.spans[MEDSPACY_DEFAULT_SPAN_GROUP_NAME][0]
 
         assert len(span._.umls_matches) > 0
-
 

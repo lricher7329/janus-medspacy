@@ -1,6 +1,3 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
 import pytest
 import spacy
 from spacy.tokens import Span, Doc
@@ -9,7 +6,6 @@ from medspacy.context import ConTextRule, ConText
 from medspacy.context.context_modifier import ConTextModifier
 
 nlp = spacy.load("en_core_web_sm")
-
 
 class TestConTextModifier:
     def create_objects(self):

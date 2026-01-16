@@ -1,6 +1,3 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
 import pytest
 import spacy
 
@@ -12,7 +9,6 @@ from spacy.tokens import Span
 from medspacy.util import tuple_overlaps
 
 nlp = spacy.load("en_core_web_sm")
-
 
 class TestConTextGraph:
     def context_graph(self):

@@ -1,6 +1,3 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
 import pytest
 import sys
 
@@ -17,7 +14,6 @@ from medspacy._extensions import (
 
 nlp = spacy.blank("en")
 doc = nlp("There is no evidence of pneumonia in the chest x-ray.")
-
 
 class TestMedSpaCyExtensions:
     def test_token_attributes(self):

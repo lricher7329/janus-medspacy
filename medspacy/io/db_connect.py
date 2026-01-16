@@ -1,3 +1,8 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 class DbConnect:
     """DbConnect is a wrapper for either a pyodbc or sqlite3 connection. It can then be
     passed into the DbReader and DbWriter classes to retrieve/store document data.
@@ -57,7 +62,7 @@ class DbConnect:
                     )
                 )
 
-        print("Opened connection to {0}.{1}".format(server, db))
+        logger.info("Opened connection to %s.%s", server, db)
 
     def create_table(self, query, table_name, drop_existing):
         if drop_existing:
@@ -76,7 +81,7 @@ class DbConnect:
             raise e
         else:
             self.conn.commit()
-            print("Created table {0} with query: {1}".format(table_name, query))
+            logger.info("Created table %s with query: %s", table_name, query)
 
     def write(self, query, data):
         try:
@@ -98,4 +103,4 @@ class DbConnect:
     def close(self):
         self.conn.commit()
         self.conn.close()
-        print("Connection closed.")
+        logger.info("Connection closed.")

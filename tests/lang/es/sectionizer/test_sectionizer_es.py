@@ -1,6 +1,4 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
+import os
 import json
 
 import spacy
@@ -17,7 +15,6 @@ from medspacy.section_detection import SectionRule
 LANGUAGE_CODE = 'es'
 
 nlp = spacy.blank(LANGUAGE_CODE)
-
 
 class TestSectionizerES:
     def test_initiate(self):

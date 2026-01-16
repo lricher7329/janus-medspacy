@@ -1,6 +1,4 @@
-import os, sys
-# recent pytest failed because of project directory is not included in sys.path somehow, might due to other configuration issue. Add this for a temp solution
-sys.path.append(os.getcwd())
+import os
 import spacy
 import warnings
 from sys import platform
@@ -31,7 +29,6 @@ nlp.add_pipe(
         "quickumls_fp": get_quickumls_demo_dir('en'),
     },
 )
-
 
 class TestQuickUMLSSpanGroup:
     def test_span_groups(self):

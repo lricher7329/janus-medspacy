@@ -3,6 +3,7 @@ This module will contain helper functions and classes for common clinical proces
 which will be used in many medspaCy components.
 """
 
+import logging
 from os import path
 from pathlib import Path
 from sys import platform
@@ -12,6 +13,8 @@ import spacy
 from spacy import Language
 
 from quickumls import spacy_component
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_PIPE_NAMES = {
     "medspacy_tokenizer",
@@ -32,7 +35,6 @@ ALL_PIPE_NAMES = {
     "medspacy_doc_consumer",
 }
 
-# just commit to trigger another check workflow action to see what hold back the tests from passing
 def load(
     model: Union[Literal["default"], str, Language] = "default",
     medspacy_enable: Union[Literal["all", "default"], Iterable[str]] = "default",
@@ -113,10 +115,9 @@ def load(
         if quickumls_path is None:
             quickumls_path = get_quickumls_demo_dir(language_code)
 
-            print(
-                "Loading QuickUMLS resources from a Medspacy-distributed SAMPLE of UMLS data from here: {}".format(
-                    quickumls_path
-                )
+            logger.info(
+                "Loading QuickUMLS resources from a Medspacy-distributed SAMPLE of UMLS data from here: %s",
+                quickumls_path
             )
 
         nlp.add_pipe("medspacy_quickumls", config={"quickumls_fp": quickumls_path})
