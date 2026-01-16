@@ -124,6 +124,25 @@ import logging
 logging.getLogger("medspacy").setLevel(logging.DEBUG)
 ```
 
+### Fork Dependencies
+
+This project uses forked versions of upstream dependencies to maintain compatibility with Python 3.13+ and address issues in the original packages:
+
+| Dependency | Fork | Upstream |
+|------------|------|----------|
+| `janus-pyrush` | [janus-pyrush](https://github.com/lawrencericher/janus-pyrush) | [PyRuSH](https://github.com/medspacy/PyRuSH) |
+| `janus-pysbd` | [janus-pysbd](https://github.com/lawrencericher/janus-pysbd) | [pysbd](https://github.com/nipunsadvilkar/pysbd) |
+
+**Current approach**: Dependencies are installed via git URLs in `requirements/requirements.txt`. This allows installation without publishing to PyPI.
+
+**Future consideration**: Publish `janus-pysbd` to PyPI for easier distribution and version pinning.
+
+**Local development**: For active development on both packages simultaneously:
+```bash
+pip install -e /path/to/janus-pysbd
+pip install -e /path/to/janus-medspacy
+```
+
 ### Security Notes
 
 - **Database I/O**: SQL identifiers (table names) are validated using regex pattern matching before execution to prevent SQL injection attacks.

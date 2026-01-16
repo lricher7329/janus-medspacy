@@ -2,6 +2,7 @@ import pytest
 
 import os
 import subprocess
+import sys
 import tempfile
 from sys import platform
 from os import path
@@ -70,7 +71,8 @@ class TestNotebooks:
                         suffix=".ipynb", delete=False
                     ) as fout:
                         args = [
-                            "jupyter",
+                            sys.executable,
+                            "-m",
                             "nbconvert",
                             "--to",
                             "notebook",

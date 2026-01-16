@@ -1,6 +1,7 @@
 ipywidgets
 pyodbc
 jupyterlab
+nbconvert
 nltk
 pandas
 pytest
