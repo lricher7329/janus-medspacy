@@ -7,7 +7,7 @@ name = "medspacy"
 dynamic = ["version","dependencies","readme"]
 authors = [{name = "medSpaCy"}]
 description = "Library for clinical NLP with spaCy."
-requires-python = ">=3.8"
+requires-python = ">=3.13"
 license = { file = "LICENSE" }
 classifiers = [
     "License :: OSI Approved :: MIT License",

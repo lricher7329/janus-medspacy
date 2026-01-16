@@ -1,3 +1,22 @@
+# Version 1.4.0
+
+## Breaking Changes
+- **Python version requirement raised to 3.13+**
+  - Python 3.8-3.12 are no longer supported
+  - This aligns with Python 3.13's long-term support window (EOL October 2028)
+
+## Improvements
+- Simplified spaCy dependency constraint from conditional version logic to `>=3.8,<4.0`
+- Fixed Python 3.13 compatibility issue: replaced deprecated `OrderedDict` import in `doc_consumer.py` with standard `dict` (insertion order is guaranteed since Python 3.7)
+
+## Dependencies
+- spaCy: `>=3.8,<4.0` (simplified from conditional constraints)
+- PyRuSH: `>=1.0.8` (unchanged)
+- pysbd: `==0.3.4` (unchanged)
+- medspacy_quickumls: `==3.2` (unchanged)
+
+---
+
 # Version 1.1.2
 
 ## QuickUMLS

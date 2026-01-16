@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from typing import Tuple, Dict, Optional
 
 from spacy.language import Language
@@ -184,7 +183,7 @@ class DocConsumer:
         """
         data = dict()
         for dtype, attrs in self.dtype_attrs.items():
-            data.setdefault(dtype, OrderedDict())
+            data.setdefault(dtype, {})
             for attr in attrs:
                 data[dtype][attr] = list()
         if "ents" in self.dtypes:

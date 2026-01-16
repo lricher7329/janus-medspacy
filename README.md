@@ -30,8 +30,14 @@ for detecting semantic modifiers and attributes of entities, including negation 
 
 Future work could include I/O, relations extraction, and pre-trained clinical models.
 
-## Latest release 1.3.1 (11/21/2024)
-What's new in 1.3.1:
+## Latest release 1.4.0
+What's new in 1.4.0:
+* - **Python 3.13+ required** - Upgraded minimum Python version to 3.13 for latest language features and long-term support (EOL Oct 2028).
+* - Simplified spaCy dependency to `>=3.8,<4.0` (removed conditional version logic).
+* - Fixed Python 3.13 compatibility issue with deprecated `OrderedDict` import.
+
+## Previous release 1.3.1 (11/21/2024)
+What was new in 1.3.1:
 * - Optimized database I/O to write concepts into [SQLite in batches](https://github.com/medspacy/medspacy/pull/301/commits/3173be24df55d43fc8ed115d9853c126aad89820), which has been tested on [mariadb](https://github.com/medspacy/medspacy/tree/mariadb_test) (not integrated into main branch yet).
 * - Reconfigured `requirements.txt` and updated medspacydependencies to support later versions of spaCy up to 3.8.2.
 * - Due to deprecated and incompatible configurations, we have stopped supporting Python 3.6 and 3.7.
@@ -82,7 +88,8 @@ pip install medspacy==medspacy 0.1.0.2
 
 ### Requirements
 The following packages are required and installed when `medspacy` is installed:
-- spaCy v3
+- Python 3.13+
+- spaCy v3.8+
 - [pyrush](https://github.com/medspacy/PyRuSH)
 
 If you download other models, you can use them by providing the model itself or model name to `medspacy.load(model_name)`:
