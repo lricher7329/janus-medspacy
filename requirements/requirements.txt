@@ -1,5 +1,5 @@
 spacy>=3.8,<4.0
-janus-pyrush @ git+ssh://git@github.com/lawrencericher/janus-pyrush.git
-janus-pysbd @ git+ssh://git@github.com/lawrencericher/janus-pysbd.git
+janus-pyrush @ file:///Users/lawrencericher/code/tools/janus-pyrush
+janus-pysbd @ file:///Users/lawrencericher/code/tools/janus-pysbd
 jsonschema>=4.0
 medspacy_quickumls==3.2
