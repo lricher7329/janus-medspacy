@@ -1,5 +1,10 @@
 # Version 1.4.1
 
+## Package Rename
+- **Renamed package from `medspacy` to `janus-medspacy`** to distinguish this fork from the upstream medspacy package.
+- The import name remains `medspacy` for backward compatibility (i.e., `import medspacy` still works).
+- **Important**: `janus-medspacy` and the original `medspacy` cannot be installed simultaneously as they share the same import namespace. Uninstall `medspacy` before installing `janus-medspacy`.
+
 ## Security
 - **SEC-001**: Fixed SQL injection vulnerability in `db_connect.py` by adding identifier validation with regex pattern matching. Table names are now validated before SQL execution.
 

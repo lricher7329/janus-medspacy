@@ -1,8 +1,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Build Status](https://github.com/medspacy/medspacy/workflows/medspacy/badge.svg)
 
-# medspacy
-Library for clinical NLP with spaCy. 
+# janus-medspacy
+Fork of [medSpaCy](https://github.com/medspacy/medspacy) - Library for clinical NLP with spaCy.
+
+**Note:** This is a fork with additional fixes and improvements. The package is named `janus-medspacy` but imports remain as `medspacy` for compatibility. You cannot have both `medspacy` and `janus-medspacy` installed simultaneously. 
 
 ![alt text](./images/medspacy_logo.png "medSpaCy logo")
 
@@ -32,6 +34,7 @@ Future work could include I/O, relations extraction, and pre-trained clinical mo
 
 ## Latest release 1.4.1
 What's new in 1.4.1:
+* - **Package renamed** from `medspacy` to `janus-medspacy` (imports remain as `medspacy`).
 * - **Security fix**: Fixed SQL injection vulnerability in database I/O module.
 * - Added logging throughout key components for better observability.
 * - Fixed mutable default argument bug in extensions module.
@@ -78,19 +81,24 @@ Regarding the rules that are available in these languages, a few citations to me
 # Usage
 ## Installation
 
-You can install `medspacy` using `setup.py`:
+**Important:** Uninstall the original `medspacy` package first if you have it installed:
+```bash
+pip uninstall medspacy
+```
+
+You can install `janus-medspacy` using `setup.py`:
 ```bash
 python setup.py install
 ```
 
-Or with pip:
+Or with pip from the repository:
 ```bash
-pip install medspacy
+pip install git+https://github.com/lawrencericher/janus-medspacy.git
 ```
 
-To install a previous version which uses spaCy 2:
+Or from a local clone:
 ```bash
-pip install medspacy==medspacy 0.1.0.2
+pip install -e /path/to/janus-medspacy
 ```
 
 ### Requirements

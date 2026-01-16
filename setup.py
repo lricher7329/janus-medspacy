@@ -53,9 +53,9 @@ def get_version():
 
 
 setup(
-    name="medspacy",
+    name="janus-medspacy",
     version=get_version(),
-    description="Library for clinical NLP with spaCy.",
+    description="Fork of medSpaCy - Library for clinical NLP with spaCy.",
     author="medSpaCy",
     packages=find_packages(),
     install_requires=required,
